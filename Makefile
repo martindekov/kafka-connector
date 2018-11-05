@@ -1,7 +1,18 @@
 TAG?=latest
+NAMESPACE?=functions
 .PHONY: build
 
 build:
-	docker build -t functions/kafka-connector:$(TAG) .
+	./build.sh $(TAG)
+
+ci-armhf-build:
+	./build.sh $(TAG)
+
+ci-armhf-push:
+	./build.sh $(TAG)
+
 push:
-	docker push functions/kafka-connector:$(TAG)
+	./push.sh $(TAG)
+
+
+

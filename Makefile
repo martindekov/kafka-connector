@@ -1,7 +1,8 @@
 TAG?=latest
+NAMESPACE?=functions
 .PHONY: build
 
 build:
-	docker build -t functions/kafka-connector:$(TAG) .
+	docker build -t $(NAMESPACE)/kafka-connector:$(TAG) .
 push:
-	docker push functions/kafka-connector:$(TAG)
+	docker push $(NAMESPACE)/kafka-connector:$(TAG)

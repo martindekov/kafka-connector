@@ -31,7 +31,9 @@ type connectorConfig struct {
 }
 
 func main() {
-	var client sarama.Client
+	var client s
+	arama.Cli
+	ent
 	var err error
 
 	var credentials *auth.BasicAuthCredentials

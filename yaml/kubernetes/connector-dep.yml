@@ -1,4 +1,3 @@
-
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -35,11 +34,13 @@ spec:
             value: ","
           - name: asynchronous_invocation
             value: "true"
+          - name: broker_hosts
+            value: "kafka:9092,"
         volumeMounts:
             - name: auth
               readOnly: true
               mountPath: "/var/secrets/"
       volumes:
-      - name: auth
-        secret:
-          secretName: basic-auth
+        - name: auth
+          secret:
+            secretName: basic-auth

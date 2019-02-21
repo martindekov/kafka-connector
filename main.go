@@ -21,8 +21,8 @@ var saramaKafkaProtocolVersion = sarama.V0_10_2_0
 
 type connectorConfig struct {
 	*types.ControllerConfig
-	Topics []string
-	Broker string
+	Topics  []string
+	Brokers []string
 }
 
 func main() {
@@ -34,7 +34,7 @@ func main() {
 
 	controller.BeginMapBuilder()
 
-	brokers := []string{config.Broker + ":9092"}
+	brokers := config.Brokers
 	waitForBrokers(brokers, config, controller)
 
 	makeConsumer(brokers, config, controller)
@@ -54,7 +54,9 @@ func waitForBrokers(brokers []string, config connectorConfig, controller *types.
 			if client != nil {
 				client.Close()
 			}
-			fmt.Println("Wait for brokers ("+config.Broker+") to come up.. ", brokers)
+			for _, broker := range config.Brokers {
+				fmt.Println("Wait for brokers ("+broker+") to come up.. ", brokers)
+			}
 		}
 
 		time.Sleep(1 * time.Second)
@@ -114,9 +116,15 @@ func makeConsumer(brokers []string, config connectorConfig, controller *types.Co
 
 func buildConnectorConfig() connectorConfig {
 
-	broker := "kafka"
-	if val, exists := os.LookupEnv("broker_host"); exists {
-		broker = val
+	var brokers []string
+	if val, exists := os.LookupEnv("broker_hosts"); exists {
+		for _, broker := range strings.Split(val, ",") {
+			if len(broker) > 0 {
+				brokers = append(brokers, broker)
+			}
+		}
+	} else {
+		brokers = append(brokers, "kafka:9092")
 	}
 
 	topics := []string{}
@@ -185,7 +193,7 @@ func buildConnectorConfig() connectorConfig {
 			TopicAnnotationDelimiter: delimiter,
 			AsyncFunctionInvocation:  asynchronousInvocation,
 		},
-		Topics: topics,
-		Broker: broker,
+		Topics:  topics,
+		Brokers: brokers,
 	}
 }

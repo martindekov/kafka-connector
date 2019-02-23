@@ -196,4 +196,5 @@ This configuration can be set in the YAML files for Kubernetes or Swarm.
 | `broker_host`           | Default is `kafka`                                          |
 | `print_response`        | Default is `true` - this will output information about the response of calling a function in the logs, including the HTTP status, topic that triggered invocation, the function name, and the length of the response body in bytes |
 | `print_response_body`   | Default is `true` - this will print the body of the response of calling a function to stdout |
+| `keepalive_duration` | Default is `10s`, if you will consume lots of topics per second, in order to keep the round robin container invocation you should set this variable lower than the topics produced per second |
 

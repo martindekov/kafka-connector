@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"log"
 	"math"
+	"net"
+	"net/http"
 	"os"
 	"strings"
 	"time"
@@ -34,6 +36,14 @@ func main() {
 
 	controller.BeginMapBuilder()
 
+	keepaliveTimeout, parsingErr := getKeepaliveConfig()
+	if parsingErr != nil {
+		fmt.Printf("Error: %s\n", parsingErr.Error())
+		os.Exit(1)
+	}
+
+	controller.Invoker.Client.Transport = kafkaConnectorTransport(config.UpstreamTimeout, keepaliveTimeout)
+
 	brokers := []string{config.Broker + ":9092"}
 	waitForBrokers(brokers, config, controller)
 
@@ -44,7 +54,6 @@ func waitForBrokers(brokers []string, config connectorConfig, controller *types.
 
 	var client sarama.Client
 	var err error
-
 	for {
 		if len(controller.Topics()) > 0 {
 			client, err = sarama.NewClient(brokers, nil)
@@ -174,4 +183,26 @@ func buildConnectorConfig() connectorConfig {
 		Topics: topics,
 		Broker: broker,
 	}
+}
+
+func kafkaConnectorTransport(upstreamTimeout, keepaliveTimeout time.Duration) *http.Transport {
+	return &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
+		DialContext: (&net.Dialer{
+			Timeout:   upstreamTimeout,
+			KeepAlive: keepaliveTimeout,
+		}).DialContext,
+		MaxIdleConns:        100,
+		MaxIdleConnsPerHost: 100,
+		IdleConnTimeout:     120 * time.Millisecond,
+	}
+}
+
+func getKeepaliveConfig() (time.Duration, error) {
+	keepaliveTimeout := 10 * time.Second
+	if val, exists := os.LookupEnv("keepalive_duration"); exists && val != "" {
+		keepaliveTimeout, err := time.ParseDuration(val)
+		return keepaliveTimeout, err
+	}
+	return keepaliveTimeout, nil
 }

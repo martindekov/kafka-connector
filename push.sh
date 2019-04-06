@@ -2,7 +2,7 @@
 set -e
 
 if [ -z "$NAMESPACE" ]; then
-    NAMESPACE="openfaas"
+    NAMESPACE="functions"
 fi
 
 docker push $NAMESPACE/kafka-connector:$TAG

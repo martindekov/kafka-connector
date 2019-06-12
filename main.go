@@ -170,6 +170,11 @@ func buildConnectorConfig() connectorConfig {
 		}
 	}
 
+	asynchronousInvocation := false
+	if val, exists := os.LookupEnv("asynchronous_invocation"); exists {
+		asynchronousInvocation = (val == "1" || val == "true")
+	}
+
 	return connectorConfig{
 		ControllerConfig: &types.ControllerConfig{
 			UpstreamTimeout:          upstreamTimeout,
@@ -178,6 +183,7 @@ func buildConnectorConfig() connectorConfig {
 			PrintResponseBody:        printResponseBody,
 			RebuildInterval:          rebuildInterval,
 			TopicAnnotationDelimiter: delimiter,
+			AsyncFunctionInvocation:  asynchronousInvocation,
 		},
 		Topics: topics,
 		Broker: broker,

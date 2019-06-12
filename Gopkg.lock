@@ -66,12 +66,12 @@
   revision = "553a641470496b2327abcac10b36396bd98e45c9"
 
 [[projects]]
-  digest = "1:28e948c6f496312ef516f570737a7f4a6933ec581243cf59b1a3b824a6e7e619"
+  digest = "1:208f4dd7e6312b7d56a810a0fc98e10f9c2d239409d058f46411f59c496e53c6"
   name = "github.com/openfaas-incubator/connector-sdk"
   packages = ["types"]
   pruneopts = "UT"
-  revision = "9b328b9d15fef1b0bac6b86460afa087ef34909e"
-  version = "0.4.0"
+  revision = "d4baf95d4c62f6295c5d4af1d36bb2b9d03a32d4"
+  version = "0.4.1"
 
 [[projects]]
   digest = "1:3f69624cb4ae8ab815a672f7d169d64786ee027a9d42eefab3c9d4e9debe0750"

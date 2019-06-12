@@ -33,6 +33,8 @@ spec:
             value: "/var/secrets/"
           - name: topic_delimiter
             value: ","
+          - name: asynchronous_invocation
+            value: "true"
         volumeMounts:
             - name: auth
               readOnly: true

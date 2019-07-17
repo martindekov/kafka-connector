@@ -209,4 +209,5 @@ This configuration can be set in the YAML files for Kubernetes or Swarm.
 | `print_response`        | Default is `true` - this will output information about the response of calling a function in the logs, including the HTTP status, topic that triggered invocation, the function name, and the length of the response body in bytes |
 | `print_response_body`   | Default is `true` - this will print the body of the response of calling a function to stdout |
 | `topic_delimiter`   | Default is `,` - Specifies character upon which to split the `topic` annotation when subscribing a function to mulitple topics |
+| `custom_port` | Default is `9092` - you can set custom port in case you deployed your kafka on non-default port |
 

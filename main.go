@@ -34,7 +34,7 @@ func main() {
 
 	controller.BeginMapBuilder()
 
-	brokers := []string{config.Broker + ":9092"}
+	brokers := []string{config.Broker}
 	waitForBrokers(brokers, config, controller)
 
 	makeConsumer(brokers, config, controller)
@@ -114,10 +114,7 @@ func makeConsumer(brokers []string, config connectorConfig, controller *types.Co
 
 func buildConnectorConfig() connectorConfig {
 
-	broker := "kafka"
-	if val, exists := os.LookupEnv("broker_host"); exists {
-		broker = val
-	}
+	broker := constructBrokerEndpoint()
 
 	topics := []string{}
 	if val, exists := os.LookupEnv("topics"); exists {
@@ -188,4 +185,18 @@ func buildConnectorConfig() connectorConfig {
 		Topics: topics,
 		Broker: broker,
 	}
+}
+
+func constructBrokerEndpoint() string {
+	broker := "kafka"
+	if val, exists := os.LookupEnv("broker_host"); exists {
+		broker = val
+	}
+
+	port := "9092"
+	if val, exists := os.LookupEnv("custom_port"); exists {
+		port = val
+	}
+
+	return fmt.Sprintf("%s:%s", broker, port)
 }

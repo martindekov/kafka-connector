@@ -205,9 +205,8 @@ This configuration can be set in the YAML files for Kubernetes or Swarm.
 | `rebuild_interval`      | Go duration - interval for rebuilding function to topic map |
 | `topics`                | Topics to which the connector will bind                     |
 | `gateway_url`           | The URL for the API gateway i.e. http://gateway:8080 or http://gateway.openfaas:8080 for Kubernetes       |
-| `broker_host`           | Default is `kafka`                                          |
+| `broker_host`           | Default is `kafka:9092`. You can configure this with our own host with port |
 | `print_response`        | Default is `true` - this will output information about the response of calling a function in the logs, including the HTTP status, topic that triggered invocation, the function name, and the length of the response body in bytes |
 | `print_response_body`   | Default is `true` - this will print the body of the response of calling a function to stdout |
 | `topic_delimiter`   | Default is `,` - Specifies character upon which to split the `topic` annotation when subscribing a function to mulitple topics |
-| `custom_port` | Default is `9092` - you can set custom port in case you deployed your kafka on non-default port |
 

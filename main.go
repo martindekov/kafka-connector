@@ -25,6 +25,10 @@ type connectorConfig struct {
 	Broker string
 }
 
+const (
+	DEFAULT_KAFKA_PORT = "9092"
+)
+
 func main() {
 
 	credentials := types.GetCredentials()
@@ -114,7 +118,10 @@ func makeConsumer(brokers []string, config connectorConfig, controller *types.Co
 
 func buildConnectorConfig() connectorConfig {
 
-	broker := constructBrokerEndpoint()
+	broker := "kafka:9092"
+	if val, exists := os.LookupEnv("broker_host"); exists {
+		broker = val
+	}
 
 	topics := []string{}
 	if val, exists := os.LookupEnv("topics"); exists {
@@ -185,18 +192,4 @@ func buildConnectorConfig() connectorConfig {
 		Topics: topics,
 		Broker: broker,
 	}
-}
-
-func constructBrokerEndpoint() string {
-	broker := "kafka"
-	if val, exists := os.LookupEnv("broker_host"); exists {
-		broker = val
-	}
-
-	port := "9092"
-	if val, exists := os.LookupEnv("custom_port"); exists {
-		port = val
-	}
-
-	return fmt.Sprintf("%s:%s", broker, port)
 }

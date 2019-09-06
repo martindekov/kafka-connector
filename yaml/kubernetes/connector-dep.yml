@@ -10,6 +10,8 @@ spec:
   replicas: 1
   template:
     metadata:
+      annotations:
+        prometheus.io.scrape: "false"
       labels:
         app: kafka
         component: kafka-connector
